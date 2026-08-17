@@ -25,15 +25,21 @@ const nodemailer = require("nodemailer");
 
 
 // DATABASE
-
 const MONGO_URL = process.env.MONGO_URI;
 
 async function main() {
+    if (!MONGO_URL) {
+        throw new Error("MONGO_URI is missing");
+    }
+
     await mongoose.connect(MONGO_URL);
     console.log("Connected to DB");
 }
 
-main().catch(err => console.log(err));
+main().catch(err => {
+    console.log("MongoDB Connection Error:", err);
+});
+
 
 // BASIC SETUP
 
