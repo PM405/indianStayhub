@@ -1,0 +1,613 @@
+/* =========================================
+   GENERAL
+========================================= */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    margin-top: 10px !important;
+    background-color: #fff;
+    color: #222;
+}
+
+.lead {
+    font-size: 1.2rem !important;
+    color: #555 !important;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+
+/* =========================================
+   NAVBAR
+========================================= */
+
+.navbar {
+    min-height: 5rem;
+    height: auto;
+    background-color: #fff !important;
+    padding: 10px 0;
+}
+
+.navbar .container {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand {
+    font-size: 20px;
+    font-weight: bold;
+    white-space: nowrap;
+    color: #0d6efd !important;
+}
+
+.fa-compass {
+    font-size: 2.2rem;
+    color: #ff6f61;
+    margin-right: 5px;
+}
+
+
+/* =========================================
+   NAVBAR LINKS
+========================================= */
+
+.nav-link {
+    font-size: 15px;
+    color: #333 !important;
+    font-weight: 600;
+}
+
+.nav-link:hover {
+    color: #0d6efd !important;
+}
+
+
+/* =========================================
+   SEARCH BAR
+========================================= */
+
+/*
+   IMPORTANT:
+   Global form CSS se search bar ko alag rakha gaya hai.
+*/
+
+.navbar form {
+    max-width: none !important;
+    width: 420px;
+    margin: 0 25px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    display: flex;
+    align-items: center;
+}
+
+.navbar form .form-control {
+    height: 44px;
+    border-radius: 10px;
+    padding: 8px 15px !important;
+    border: 1px solid #ced4da;
+    background-color: #fff;
+}
+
+.navbar form .form-control:focus {
+    border-color: #0d6efd !important;
+    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.15) !important;
+}
+
+
+/* Search Button */
+
+.navbar form .btn {
+    width: auto !important;
+    min-width: 55px;
+    height: 44px;
+    padding: 8px 15px !important;
+    margin: 0 !important;
+    border-radius: 10px;
+    background-color: #0d6efd !important;
+    color: white !important;
+    border: none;
+    font-weight: 600;
+}
+
+.navbar form .btn:hover {
+    background-color: #084298 !important;
+    transform: scale(1.02);
+}
+
+
+/* =========================================
+   NAVBAR BUTTONS
+========================================= */
+
+.navbar .btn {
+    font-size: 14px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    width: auto !important;
+}
+
+.navbar .nav-item {
+    margin-left: 5px;
+}
+
+
+/* =========================================
+   TOGGLER
+========================================= */
+
+.navbar-toggler {
+    margin-left: auto !important;
+    width: auto !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    font-size: 14px;
+    border-radius: 6px;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+
+/* Hide toggler on desktop */
+
+@media (min-width: 992px) {
+
+    .navbar-toggler {
+        display: none !important;
+    }
+}
+
+
+/* =========================================
+   HERO SECTION
+========================================= */
+
+.container > .text-center {
+    margin-top: 40px;
+    margin-bottom: 45px;
+}
+
+.container > .text-center h1 {
+    font-size: 2.7rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 15px;
+}
+
+.container > .text-center .lead {
+    font-size: 1.15rem !important;
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   LISTING SECTION
+========================================= */
+
+h2 {
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+
+/* =========================================
+   CARDS
+========================================= */
+
+.card {
+    width: 100% !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.10) !important;
+    transition: all 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+
+/* =========================================
+   CARD IMAGE
+========================================= */
+
+.card-img-top {
+    width: 100%;
+    height: 230px !important;
+    object-fit: cover !important;
+}
+
+
+/* =========================================
+   CARD BODY
+========================================= */
+
+.card-body {
+    padding: 18px;
+}
+
+.card-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.card-body .text-muted {
+    font-size: 0.95rem;
+}
+
+
+/* =========================================
+   NEW LISTING / EDIT FORM
+========================================= */
+
+h3 {
+    text-align: center;
+    margin-top: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+
+/*
+   Global form for listing/edit pages
+*/
+
+form:not(.navbar form) {
+    max-width: 600px !important;
+    margin: 30px auto;
+    padding: 25px;
+    background: #f8f3f3 !important;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #444;
+}
+
+.form-control {
+    border-radius: 8px !important;
+    padding: 10px !important;
+}
+
+.form-control:focus {
+    border-color: #0d6efd !important;
+    box-shadow: 0 0 5px rgba(13, 110, 253, 0.5) !important;
+}
+
+
+/* =========================================
+   NORMAL BUTTONS
+========================================= */
+
+button {
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #0d6efd !important;
+    color: white !important;
+    border: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #084298 !important;
+    transform: scale(1.03);
+}
+
+
+/* =========================================
+   SHOW IMAGE PAGE
+========================================= */
+
+.show-image {
+    height: 30vh !important;
+    object-fit: cover !important;
+    width: 100% !important;
+}
+
+
+/* =========================================
+   EDIT BUTTON
+========================================= */
+
+.edit-btn {
+    background-color: #5961d3 !important;
+    color: #fff !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    border-radius: 5px !important;
+    transition: 0.3s ease !important;
+}
+
+.edit-btn:hover {
+    background-color: #3b4cc0 !important;
+    transform: scale(1.05) !important;
+}
+
+
+/* =========================================
+   EDIT FORM
+========================================= */
+
+.edit {
+    max-width: 600px !important;
+    margin: 30px auto;
+    padding: 25px;
+    background: #f8f3f3 !important;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+
+/* =========================================
+   CARD FOOTER
+========================================= */
+
+.card-footer {
+    margin-bottom: 20px !important;
+    width: 100% !important;
+    height: 50px !important;
+}
+
+#del {
+    border: none !important;
+    padding: 10px 20px !important;
+    border-radius: 5px !important;
+    transition: 0.3s ease;
+    margin-top: -5px !important;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+footer {
+    min-height: 8rem;
+    background-color: #ebebeb;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.f-info-links a {
+    text-decoration: none;
+    color: #222222;
+    margin-right: 1rem;
+}
+
+.f-info-links a:hover {
+    text-decoration: underline;
+}
+
+.f-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 991px) {
+
+    .navbar {
+        padding: 10px 15px;
+    }
+
+    /* Search becomes full width */
+
+    .navbar form {
+        width: 100% !important;
+        margin: 15px 0 !important;
+    }
+
+    .navbar form .form-control {
+        width: 100%;
+        min-width: 0;
+    }
+
+    /* Mobile menu */
+
+    .navbar-collapse {
+        background: #fff;
+        border-radius: 10px;
+        padding: 12px;
+        margin-top: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .navbar-nav {
+        align-items: flex-end;
+        text-align: right;
+        width: 100%;
+    }
+
+    .nav-item {
+        margin-bottom: 8px;
+        width: 100%;
+    }
+
+    .navbar .btn {
+        width: auto !important;
+        display: inline-block;
+    }
+
+    /* Hero */
+
+    .container > .text-center h1 {
+        font-size: 2.2rem;
+    }
+
+    .container > .text-center .lead {
+        font-size: 1.05rem !important;
+    }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 576px) {
+
+    /* Navbar */
+
+    .navbar {
+        min-height: 70px;
+        padding: 10px 12px;
+    }
+
+    .navbar-brand {
+        font-size: 18px;
+    }
+
+    .fa-compass {
+        font-size: 1.8rem;
+    }
+
+    /* Search */
+
+    .navbar form {
+        width: 100% !important;
+        margin: 12px 0 !important;
+    }
+
+    .navbar form .form-control {
+        height: 43px;
+        font-size: 14px;
+        min-width: 0;
+    }
+
+    .navbar form .btn {
+        height: 43px;
+        min-width: 52px;
+        padding: 8px 12px !important;
+    }
+
+    /* Navbar links */
+
+    .nav-link {
+        font-size: 14px;
+    }
+
+    /* Navbar buttons */
+
+    .navbar .btn {
+        width: auto !important;
+        margin: 3px 0;
+    }
+
+    /* Hero */
+
+    .container > .text-center {
+        margin-top: 30px;
+        margin-bottom: 35px;
+    }
+
+    .container > .text-center h1 {
+        font-size: 1.8rem;
+        line-height: 1.3;
+    }
+
+    .container > .text-center .lead {
+        font-size: 0.95rem !important;
+    }
+
+    /* Heading */
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    /* Cards */
+
+    .card-img-top {
+        height: 210px !important;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+    }
+
+    .card-text {
+        font-size: 1rem;
+    }
+}
+
+
+/* =========================================
+   EXTRA SMALL PHONE
+========================================= */
+
+@media (max-width: 400px) {
+
+    .navbar-brand {
+        font-size: 16px;
+    }
+
+    .fa-compass {
+        font-size: 1.5rem;
+    }
+
+    .navbar-toggler {
+        padding: 2px 5px;
+        font-size: 12px;
+    }
+
+    .navbar form .form-control {
+        height: 41px;
+        font-size: 13px;
+        padding: 8px !important;
+    }
+
+    .navbar form .btn {
+        height: 41px;
+        min-width: 47px;
+        padding: 6px 9px !important;
+        font-size: 13px;
+    }
+
+    .container > .text-center h1 {
+        font-size: 1.55rem;
+    }
+
+    .container > .text-center .lead {
+        font-size: 0.88rem !important;
+    }
+
+    .card-img-top {
+        height: 190px !important;
+    }
+}

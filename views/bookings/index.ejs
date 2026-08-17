@@ -1,0 +1,126 @@
+<% layout("layouts/boilerplate") %>
+
+  <div class="container mt-5">
+
+    <h2 class="mb-4 text-center">📅 My Bookings</h2>
+
+    <% if (bookings.length===0) { %>
+      <div class="text-center">
+        <h5>No bookings yet </h5>
+        <a href="/listings" class="btn btn-primary mt-3">Explore Stays</a>
+      </div>
+      <% } %>
+
+        <div class="row">
+
+          <% bookings.forEach(b=> { %>
+
+            <% if (b.listing) { %>
+
+              <div class="col-md-6 col-lg-4 mb-4">
+
+                <div class="card h-100 shadow-sm border-0">
+
+                  <!-- Image -->
+                  <img src="<%= b.listing.image ? b.listing.image.url : '/images/default.jpg' %>" class="card-img-top"
+                    style="height:200px; object-fit:cover;">
+
+                  <div class="card-body">
+
+                    <!-- Title -->
+                    <h5 class="card-title">
+                      <%= b.listing.title %>
+                    </h5>
+
+                    <!-- Location -->
+                    <p class="text-muted mb-1">
+                      📍 <%= b.listing.location %>, <%= b.listing.country %>
+                    </p>
+
+                    <!-- Dates -->
+                    <p class="mb-1">
+                      <b>Check-In:</b>
+                      <%= new Date(b.checkIn).toDateString() %>
+                    </p>
+
+                    <p>
+                      <b>Check-Out:</b>
+                      <%= new Date(b.checkOut).toDateString() %>
+                    </p>
+
+                    <!-- Price -->
+                    <p class="fw-bold text-success">
+                      ₹ <%= b.listing.price.toLocaleString("en-IN") %> / night
+                    </p>
+
+                    <!-- Status -->
+                    <p>
+                      <b>Status:</b>
+                      <span class="<%= b.paymentStatus === 'Paid' ? 'text-success' : 'text-warning' %>">
+                        <%= b.paymentStatus || "Pending" %>
+                      </span>
+                    </p>
+
+                  </div>
+
+                  <!-- Footer -->
+                  <div class="card-footer bg-white border-0 text-center d-flex justify-content-between">
+
+                    <a href="/listings/<%= b.listing._id %>" class="btn btn-outline-primary btn-sm">
+                      View
+                    </a>
+
+                    <!-- CANCEL  -->
+                    <button type="button" class="btn btn-outline-danger btn-sm cancel-btn" data-id="<%= b._id %>">
+                      Cancel
+                    </button>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              <% } else { %>
+
+                <!-- Broken booking fallback -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                  <div class="card p-3 text-center shadow-sm">
+                    <h6> Listing not available</h6>
+                    <p class="text-muted">This booking is linked to a deleted listing.</p>
+                  </div>
+                </div>
+
+                <% } %>
+
+                  <% }) %>
+
+        </div>
+
+  </div>
+  <script>
+    document.querySelectorAll(".cancel-btn").forEach(btn => {
+      btn.addEventListener("click", async function (e) {
+        e.preventDefault();
+
+        const bookingId = this.dataset.id;
+        const card = this.closest(".col-md-6");
+
+        try {
+          const res = await fetch(`/bookings/${bookingId}`, {
+            method: "DELETE"
+          });
+
+          if (res.ok) {
+            card.remove(); // remove without reload
+          } else {
+            alert("Cancel failed");
+          }
+
+        } catch (err) {
+          console.log(err);
+          alert("Server error");
+        }
+      });
+    });
+  </script>

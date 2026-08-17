@@ -1,0 +1,128 @@
+<% layout("layouts/boilerplate") %>
+  
+
+  <div class="container mt-4">
+
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+
+        <img src="<%= listing.image.url %>" class="show-image">
+
+        <h3>
+          <%= listing.title %>
+        </h3>
+
+        <p><b>Description:</b>
+          <%= listing.description %>
+        </p>
+        <p><b>Price:</b> ₹ <%= listing.price.toLocaleString("en-IN") %>
+        </p>
+        <p><b>Location:</b>
+          <%= listing.location %>
+        </p>
+        <p><b>Country:</b>
+          <%= listing.country %>
+        </p>
+
+        <!-- ================= BOOKING SECTION ================= -->
+        <hr>
+        <h4 class="mt-3">📅 Book This Stay</h4>
+
+        <% if(currentUser) { %>
+             <form action="/book/<%= listing._id %>" method="POST" enctype="application/x-www-form-urlencoded">
+
+            <!-- Check-In -->
+            <div class="mb-2">
+              <label>Check-In</label>
+              <input type="date" name="checkIn" class="form-control" required>
+            </div>
+
+            <!-- Check-Out -->
+            <div class="mb-2">
+              <label>Check-Out</label>
+              <input type="date" name="checkOut" class="form-control" required>
+            </div>
+
+            <!-- Name -->
+            <div class="mb-2">
+              <label>Your Name</label>
+              <input type="text" name="name" class="form-control" required>
+            </div>
+
+            <!-- Phone -->
+            <div class="mb-2">
+              <label>Phone Number</label>
+              <input type="text" name="phone" class="form-control" maxlength="10" required>
+            </div>
+
+            <!-- SELECT ID TYPE -->
+            <div class="mb-2">
+              <label><b>Select ID Type</b></label><br>
+
+              <input type="radio" name="idType" value="aadhaar" onclick="toggleField()" required> Aadhaar
+              <input type="radio" name="idType" value="pincode" onclick="toggleField()"> PIN Code
+            </div>
+
+            <!-- Aadhaar -->
+            <div class="mb-2" id="aadhaarField" style="display:none;">
+              <input type="text" id="aadhaarInput" name="aadhaar" class="form-control"
+                placeholder="Enter Aadhaar Number" maxlength="12" disabled>
+            </div>
+
+            <!-- PIN -->
+            <div class="mb-2" id="pincodeField" style="display:none;">
+              <input type="text" id="pincodeInput" name="pincode" class="form-control" placeholder="Enter PIN Code" maxlength="6" disabled>
+            </div>
+
+            <button class="btn btn-success mt-2 w-100">
+              Book Now
+            </button>
+
+          </form>
+
+          <% } else { %>
+
+            <p class="text-danger">⚠ Please login to book</p>
+            <a href="/login" class="btn btn-primary w-100">Login</a>
+
+            <% } %>
+
+              <!-- ================= END ================= -->
+
+              <hr>
+
+              <a href="/listings" class="btn btn-secondary mt-3">Back</a>
+
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ================= JS ================= -->
+  <script>
+function toggleField() {
+  const type = document.querySelector('input[name="idType"]:checked').value;
+
+  const aadhaarField = document.getElementById("aadhaarField");
+  const pincodeField = document.getElementById("pincodeField");
+
+  const aadhaarInput = document.getElementById("aadhaarInput");
+  const pincodeInput = document.getElementById("pincodeInput");
+
+  // reset
+  aadhaarField.style.display = "none";
+  pincodeField.style.display = "none";
+
+  aadhaarInput.disabled = true;
+  pincodeInput.disabled = true;
+
+  if (type === "aadhaar") {
+    aadhaarField.style.display = "block";
+    aadhaarInput.disabled = false;
+  } else {
+    pincodeField.style.display = "block";
+    pincodeInput.disabled = false;
+  }
+}
+</script>
