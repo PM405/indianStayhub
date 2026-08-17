@@ -1,17 +1,23 @@
 {
-  "name": "mini-project",
+  "name": "indiastayhub",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "IndiaStayHub - Hotel Booking Web Application",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "nodejs",
+    "express",
+    "mongodb",
+    "ejs",
+    "hotel-booking"
+  ],
+  "author": "Prince Mishra",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "connect-flash": "^0.1.1",
     "dotenv": "^17.4.2",
