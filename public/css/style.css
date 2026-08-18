@@ -68,11 +68,6 @@ a {
    SEARCH BAR
 ========================================= */
 
-/*
-   IMPORTANT:
-   Global form CSS se search bar ko alag rakha gaya hai.
-*/
-
 .navbar form {
     max-width: none !important;
     width: 420px;
@@ -99,7 +94,9 @@ a {
 }
 
 
-/* Search Button */
+/* =========================================
+   SEARCH BUTTON
+========================================= */
 
 .navbar form .btn {
     width: auto !important;
@@ -156,7 +153,9 @@ a {
 }
 
 
-/* Hide toggler on desktop */
+/* =========================================
+   DESKTOP TOGGLER
+========================================= */
 
 @media (min-width: 992px) {
 
@@ -255,7 +254,7 @@ h2 {
 
 
 /* =========================================
-   NEW LISTING / EDIT FORM
+   NEW LISTING FORM
 ========================================= */
 
 h3 {
@@ -264,11 +263,6 @@ h3 {
     font-weight: bold;
     color: #333;
 }
-
-
-/*
-   Global form for listing/edit pages
-*/
 
 form:not(.navbar form) {
     max-width: 600px !important;
@@ -317,7 +311,7 @@ button:hover {
 
 
 /* =========================================
-   SHOW IMAGE PAGE
+   SHOW IMAGE
 ========================================= */
 
 .show-image {
@@ -422,8 +416,6 @@ footer {
         padding: 10px 15px;
     }
 
-    /* Search becomes full width */
-
     .navbar form {
         width: 100% !important;
         margin: 15px 0 !important;
@@ -433,8 +425,6 @@ footer {
         width: 100%;
         min-width: 0;
     }
-
-    /* Mobile menu */
 
     .navbar-collapse {
         background: #fff;
@@ -460,14 +450,17 @@ footer {
         display: inline-block;
     }
 
-    /* Hero */
-
     .container > .text-center h1 {
         font-size: 2.2rem;
     }
 
     .container > .text-center .lead {
         font-size: 1.05rem !important;
+    }
+
+    .row.g-4 > .col {
+        flex: 0 0 50%;
+        max-width: 50%;
     }
 }
 
@@ -477,8 +470,6 @@ footer {
 ========================================= */
 
 @media (max-width: 576px) {
-
-    /* Navbar */
 
     .navbar {
         min-height: 70px;
@@ -492,8 +483,6 @@ footer {
     .fa-compass {
         font-size: 1.8rem;
     }
-
-    /* Search */
 
     .navbar form {
         width: 100% !important;
@@ -512,20 +501,14 @@ footer {
         padding: 8px 12px !important;
     }
 
-    /* Navbar links */
-
     .nav-link {
         font-size: 14px;
     }
-
-    /* Navbar buttons */
 
     .navbar .btn {
         width: auto !important;
         margin: 3px 0;
     }
-
-    /* Hero */
 
     .container > .text-center {
         margin-top: 30px;
@@ -541,16 +524,32 @@ footer {
         font-size: 0.95rem !important;
     }
 
-    /* Heading */
-
     h2 {
         font-size: 1.5rem;
     }
 
-    /* Cards */
+    .row.g-4 {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    .row.g-4 > .col {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    .card {
+        width: 100% !important;
+        margin-bottom: 15px !important;
+    }
 
     .card-img-top {
         height: 210px !important;
+        width: 100% !important;
+        object-fit: cover !important;
     }
 
     .card-body {
@@ -568,7 +567,7 @@ footer {
 
 
 /* =========================================
-   EXTRA SMALL PHONE
+   SMALL PHONE
 ========================================= */
 
 @media (max-width: 400px) {
@@ -609,5 +608,10 @@ footer {
 
     .card-img-top {
         height: 190px !important;
+    }
+
+    .row.g-4 > .col {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
     }
 }
