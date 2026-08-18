@@ -3,7 +3,6 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 
-
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const path = require("path");
@@ -11,6 +10,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 
@@ -19,12 +19,9 @@ const User = require("./models/user");
 const Booking = require("./models/booking");
 
 const wrapAsync = require("./utils/wrapAsync");
-const ExpressError = require("./utils/ExpressError");
 
 const nodemailer = require("nodemailer");
 
-
-// DATABASE
 const MONGO_URL = process.env.MONGO_URI;
 
 async function connectDB() {
@@ -53,9 +50,6 @@ app.use(async (req, res, next) => {
     }
 });
 
-
-// BASIC SETUP
-
 app.engine("ejs", ejsMate);
 
 app.set("view engine", "ejs");
@@ -71,6 +65,8 @@ app.use(
     })
 );
 
+app.use(express.json());
+
 app.use(methodOverride("_method"));
 
 app.use(
@@ -79,29 +75,33 @@ app.use(
     )
 );
 
-
-// SESSION
-
 app.use(
     session({
-        secret: "secretkey",
+        secret: process.env.SESSION_SECRET || "secretkey",
         resave: false,
-        saveUninitialized: false
+        saveUninitialized: false,
+
+        store: MongoStore.create({
+            mongoUrl: MONGO_URL,
+            collectionName: "sessions"
+        }),
+
+        cookie: {
+            httpOnly: true,
+            secure: true,
+            maxAge: 1000 * 60 * 60 * 24 * 7
+        }
     })
 );
 
-
-// PASSPORT
-
 app.use(passport.initialize());
+
 app.use(passport.session());
 
 passport.use(
     new LocalStrategy(
         async (username, password, done) => {
-
             try {
-
                 const user =
                     await User.findOne({ username });
 
@@ -122,11 +122,8 @@ passport.use(
                 return done(null, false);
 
             } catch (err) {
-
                 return done(err);
-
             }
-
         }
     )
 );
@@ -139,72 +136,46 @@ passport.serializeUser(
 
 passport.deserializeUser(
     async (id, done) => {
-
         try {
-
             const user =
                 await User.findById(id);
 
             done(null, user);
 
         } catch (err) {
-
             done(err);
-
         }
-
     }
 );
-
-
-// CURRENT USER
 
 app.use(
     (req, res, next) => {
-
         res.locals.currentUser = req.user;
-
         next();
-
     }
 );
 
-
-// EMAIL
-
 const transporter =
     nodemailer.createTransport({
-
         service: "gmail",
 
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS
         }
-
     });
-
-
-// ROOT
 
 app.get(
     "/",
     (req, res) => {
-
         res.redirect("/login");
-
     }
 );
-
-
-// REGISTER
 
 app.get(
     "/register",
     (req, res) => {
-
         res.render("users/register");
-
     }
 );
 
@@ -212,7 +183,6 @@ app.post(
     "/register",
 
     async (req, res) => {
-
         const {
             username,
             email,
@@ -224,29 +194,21 @@ app.post(
 
         const user =
             new User({
-
                 username,
                 email,
                 password: hash
-
             });
 
         await user.save();
 
         res.redirect("/login");
-
     }
 );
-
-
-// LOGIN
 
 app.get(
     "/login",
     (req, res) => {
-
         res.render("users/login");
-
     }
 );
 
@@ -261,45 +223,46 @@ app.post(
     ),
 
     (req, res) => {
+        req.session.save((err) => {
+            if (err) {
+                console.log(
+                    "Session Save Error:",
+                    err.message
+                );
 
-        res.redirect("/listings");
+                return res.redirect("/login");
+            }
 
+            res.redirect("/listings");
+        });
     }
 );
-
-
-// LOGOUT
 
 app.get(
     "/logout",
     (req, res) => {
+        req.logout((err) => {
+            if (err) {
+                return res.redirect("/listings");
+            }
 
-        req.logout(() => {
-
-            res.redirect("/login");
-
+            req.session.destroy(() => {
+                res.redirect("/login");
+            });
         });
-
     }
 );
 
-
-// AUTH
-
 function isLoggedIn(req, res, next) {
-
-    if (!req.isAuthenticated()) {
-
-        return res.redirect("/login");
-
+    if (
+        req.isAuthenticated() &&
+        req.user
+    ) {
+        return next();
     }
 
-    next();
-
+    return res.redirect("/login");
 }
-
-
-// ALL LISTINGS
 
 app.get(
     "/listings",
@@ -318,13 +281,9 @@ app.get(
                     allListings
                 }
             );
-
         }
     )
 );
-
-
-// SEARCH
 
 app.get(
     "/listings/search",
@@ -337,41 +296,34 @@ app.get(
             const { q } = req.query;
 
             if (!q || q.trim() === "") {
-
                 return res.redirect("/listings");
-
             }
 
-            const searchText = q.trim();
+            const searchText =
+                q.trim();
 
             const allListings =
                 await Listing.find({
-
                     $or: [
-
                         {
                             title: {
                                 $regex: searchText,
                                 $options: "i"
                             }
                         },
-
                         {
                             location: {
                                 $regex: searchText,
                                 $options: "i"
                             }
                         },
-
                         {
                             country: {
                                 $regex: searchText,
                                 $options: "i"
                             }
                         }
-
                     ]
-
                 });
 
             res.render(
@@ -380,13 +332,9 @@ app.get(
                     allListings
                 }
             );
-
         }
     )
 );
-
-
-// LISTING BY ID
 
 app.get(
     "/listings/:id",
@@ -407,13 +355,9 @@ app.get(
                     listing
                 }
             );
-
         }
     )
 );
-
-
-// CREATE LISTING
 
 app.post(
     "/listings",
@@ -431,13 +375,9 @@ app.post(
             await listing.save();
 
             res.redirect("/listings");
-
         }
     )
 );
-
-
-// CREATE BOOKING
 
 app.post(
     "/book/:id",
@@ -447,29 +387,38 @@ app.post(
     wrapAsync(
         async (req, res) => {
 
+            console.log(
+                "Booking User:",
+                req.user
+            );
+
             const booking =
                 new Booking({
-
                     user: req.user._id,
 
-                    listing: req.params.id,
+                    listing:
+                        req.params.id,
 
-                    checkIn: req.body.checkIn,
+                    checkIn:
+                        req.body.checkIn,
 
-                    checkOut: req.body.checkOut,
+                    checkOut:
+                        req.body.checkOut,
 
-                    name: req.body.name,
+                    name:
+                        req.body.name,
 
-                    phone: req.body.phone,
+                    phone:
+                        req.body.phone,
 
-                    aadhaar: req.body.aadhaar,
+                    aadhaar:
+                        req.body.aadhaar,
 
-                    pincode: req.body.pincode
-
+                    pincode:
+                        req.body.pincode
                 });
 
             await booking.save();
-
 
             if (
                 process.env.EMAIL_USER &&
@@ -480,9 +429,11 @@ app.post(
 
                     await transporter.sendMail({
 
-                        from: process.env.EMAIL_USER,
+                        from:
+                            process.env.EMAIL_USER,
 
-                        to: req.user.email,
+                        to:
+                            req.user.email,
 
                         subject:
                             "Booking Confirmed - IndiaStayHub",
@@ -551,7 +502,6 @@ app.post(
                             </div>
 
                         `
-
                     });
 
                     console.log(
@@ -564,19 +514,13 @@ app.post(
                         "Email Error:",
                         emailError.message
                     );
-
                 }
-
             }
 
             res.redirect("/mybookings");
-
         }
     )
 );
-
-
-// CANCEL BOOKING
 
 app.delete(
     "/bookings/:id",
@@ -596,9 +540,9 @@ app.delete(
                 return res
                     .status(404)
                     .json({
-                        message: "Booking not found"
+                        message:
+                            "Booking not found"
                     });
-
             }
 
             if (
@@ -609,16 +553,14 @@ app.delete(
                 return res
                     .status(403)
                     .json({
-                        message: "Not authorized"
+                        message:
+                            "Not authorized"
                     });
-
             }
-
 
             await Booking.findByIdAndDelete(
                 req.params.id
             );
-
 
             if (
                 process.env.EMAIL_USER &&
@@ -629,9 +571,11 @@ app.delete(
 
                     await transporter.sendMail({
 
-                        from: process.env.EMAIL_USER,
+                        from:
+                            process.env.EMAIL_USER,
 
-                        to: req.user.email,
+                        to:
+                            req.user.email,
 
                         subject:
                             "Booking Cancelled - IndiaStayHub",
@@ -695,7 +639,6 @@ app.delete(
                             </div>
 
                         `
-
                     });
 
                     console.log(
@@ -708,24 +651,17 @@ app.delete(
                         "Cancellation email error:",
                         emailError.message
                     );
-
                 }
-
             }
-
 
             res.json({
                 success: true,
                 message:
                     "Booking cancelled successfully"
             });
-
         }
     )
 );
-
-
-// MY BOOKINGS
 
 app.get(
     "/mybookings",
@@ -737,9 +673,7 @@ app.get(
 
             const bookings =
                 await Booking.find({
-
                     user: req.user._id
-
                 })
                 .populate("listing");
 
@@ -749,13 +683,9 @@ app.get(
                     bookings
                 }
             );
-
         }
     )
 );
-
-
-// ERROR HANDLER
 
 app.use(
     (err, req, res, next) => {
@@ -765,11 +695,7 @@ app.use(
         res
             .status(500)
             .send(err.message);
-
     }
 );
-
-
-// SERVER
 
 module.exports = app;
