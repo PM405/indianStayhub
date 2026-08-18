@@ -99,28 +99,57 @@
 
   </div>
   <script>
-    document.querySelectorAll(".cancel-btn").forEach(btn => {
-      btn.addEventListener("click", async function (e) {
-        e.preventDefault();
+  document.querySelectorAll(".cancel-btn").forEach(btn => {
+    btn.addEventListener("click", async function () {
 
-        const bookingId = this.dataset.id;
-        const card = this.closest(".col-md-6");
+      const bookingId = this.dataset.id;
+      const card = this.closest(".col-md-6");
 
-        try {
-          const res = await fetch(`/bookings/${bookingId}`, {
-            method: "DELETE"
-          });
+      const confirmCancel = confirm(
+        "Are you sure you want to cancel this booking?"
+      );
 
-          if (res.ok) {
-            card.remove(); // remove without reload
-          } else {
-            alert("Cancel failed");
+      if (!confirmCancel) {
+        return;
+      }
+
+      try {
+
+        const response = await fetch(
+          `/bookings/${bookingId}`,
+          {
+            method: "DELETE",
+            credentials: "same-origin",
+            headers: {
+              "Content-Type": "application/json"
+            }
           }
+        );
 
-        } catch (err) {
-          console.log(err);
-          alert("Server error");
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+
+          card.remove();
+
+          alert("Booking cancelled successfully");
+
+        } else {
+
+          alert(
+            data.message || "Booking cancellation failed"
+          );
+
         }
-      });
+
+      } catch (error) {
+
+        console.log("Cancel Error:", error);
+
+        alert("Server error. Please try again.");
+
+      }
+
     });
-  </script>
+  });
+</script>
