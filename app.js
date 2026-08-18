@@ -22,6 +22,7 @@ const wrapAsync = require("./utils/wrapAsync");
 const ExpressError = require("./utils/ExpressError"); 
  
 const nodemailer = require("nodemailer"); 
+app.use(methodOverride("_method"));
  
  
 // DATABASE 
@@ -578,151 +579,130 @@ app.post(
  
 // CANCEL BOOKING 
  
-app.delete( 
-    "/bookings/:id", 
- 
-    isLoggedIn, 
- 
-    wrapAsync( 
-        async (req, res) => { 
- 
-            const booking = 
-                await Booking.findById( 
-                    req.params.id 
-                ); 
- 
-            if (!booking) { 
- 
-                return res 
-                    .status(404) 
-                    .json({ 
-                        message: "Booking not found" 
-                    }); 
- 
-            } 
- 
-            if ( 
-                booking.user.toString() !== 
-                req.user._id.toString() 
-            ) { 
- 
-                return res 
-                    .status(403) 
-                    .json({ 
-                        message: "Not authorized" 
-                    }); 
- 
-            } 
- 
- 
-            await Booking.findByIdAndDelete( 
-                req.params.id 
-            ); 
- 
- 
-            if ( 
-                process.env.EMAIL_USER && 
-                process.env.EMAIL_PASS 
-            ) { 
- 
-                try { 
- 
-                    await transporter.sendMail({ 
- 
-                        from: process.env.EMAIL_USER, 
- 
-                        to: req.user.email, 
- 
-                        subject: 
-                            "Booking Cancelled - IndiaStayHub", 
- 
-                        html: ` 
- 
-                            <div style=" 
-                                font-family: Arial; 
-                                padding: 20px; 
-                                border: 1px solid #ddd; 
-                                border-radius: 10px; 
-                            "> 
- 
-                                <h2> 
-                                    Booking Cancelled 
-                                </h2> 
- 
-                                <p> 
-                                    Hello 
-                                    <b>${req.user.username}</b>, 
-                                </p> 
- 
-                                <p> 
-                                    Your booking has been 
-                                    successfully cancelled. 
-                                </p> 
- 
-                                <hr> 
- 
-                                <h3> 
-                                    Booking Details 
-                                </h3> 
- 
-                                <p> 
-                                    <b>Booking ID:</b> 
-                                    ${booking._id} 
-                                </p> 
- 
-                                <p> 
-                                    <b>Check-In:</b> 
-                                    ${booking.checkIn} 
-                                </p> 
- 
-                                <p> 
-                                    <b>Check-Out:</b> 
-                                    ${booking.checkOut} 
-                                </p> 
- 
-                                <p> 
-                                    <b>Name:</b> 
-                                    ${booking.name} 
-                                </p> 
- 
-                                <hr> 
- 
-                                <p> 
-                                    Thank you for using 
-                                    <b>IndiaStayHub</b>. 
-                                </p> 
- 
-                            </div> 
- 
-                        ` 
- 
-                    }); 
- 
-                    console.log( 
-                        "Cancellation email sent" 
-                    ); 
- 
-                } catch (emailError) { 
- 
-                    console.log( 
-                        "Cancellation email error:", 
-                        emailError.message 
-                    ); 
- 
-                } 
- 
-            } 
- 
- 
-            res.json({ 
-                success: true, 
-                message: 
-                    "Booking cancelled successfully" 
-            }); 
- 
-        } 
-    ) 
-); 
+app.delete(
+    "/bookings/:id",
+
+    isLoggedIn,
+
+    wrapAsync(
+        async (req, res) => {
+
+            const booking =
+                await Booking.findById(
+                    req.params.id
+                );
+
+            if (!booking) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Booking not found"
+                });
+            }
+
+            if (
+                booking.user.toString() !==
+                req.user._id.toString()
+            ) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Not authorized"
+                });
+            }
+
+            await Booking.findByIdAndDelete(
+                req.params.id
+            );
+
+            if (
+                process.env.EMAIL_USER &&
+                process.env.EMAIL_PASS
+            ) {
+                try {
+
+                    await transporter.sendMail({
+                        from: process.env.EMAIL_USER,
+                        to: req.user.email,
+
+                        subject:
+                            "Booking Cancelled - IndiaStayHub",
+
+                        html: `
+                            <div style="
+                                font-family: Arial;
+                                padding: 20px;
+                                border: 1px solid #ddd;
+                                border-radius: 10px;
+                            ">
+
+                                <h2>Booking Cancelled</h2>
+
+                                <p>
+                                    Hello
+                                    <b>${req.user.username}</b>,
+                                </p>
+
+                                <p>
+                                    Your booking has been
+                                    successfully cancelled.
+                                </p>
+
+                                <hr>
+
+                                <h3>Booking Details</h3>
+
+                                <p>
+                                    <b>Booking ID:</b>
+                                    ${booking._id}
+                                </p>
+
+                                <p>
+                                    <b>Check-In:</b>
+                                    ${booking.checkIn}
+                                </p>
+
+                                <p>
+                                    <b>Check-Out:</b>
+                                    ${booking.checkOut}
+                                </p>
+
+                                <p>
+                                    <b>Name:</b>
+                                    ${booking.name}
+                                </p>
+
+                                <hr>
+
+                                <p>
+                                    Thank you for using
+                                    <b>IndiaStayHub</b>.
+                                </p>
+
+                            </div>
+                        `
+                    });
+
+                    console.log(
+                        "Cancellation email sent"
+                    );
+
+                } catch (emailError) {
+
+                    console.log(
+                        "Cancellation email error:",
+                        emailError.message
+                    );
+
+                }
+            }
+
+            res.status(200).json({
+                success: true,
+                message:
+                    "Booking cancelled successfully"
+            });
+        }
+    )
+);
  
  
 // MY BOOKINGS 
