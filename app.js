@@ -434,7 +434,7 @@ app.post(
                             userEmail,
 
                         subject:
-                            "Booking Confirmed - IndiaStayHub",
+                            "Booking Confirmed - worldStayHub",
 
                         html: `
 
@@ -467,7 +467,7 @@ app.post(
 
                                     <p>
                                         Your booking at
-                                        <b>IndiaStayHub</b>
+                                        <b>worldStayHub</b>
                                         has been successfully confirmed.
                                     </p>
 
@@ -527,7 +527,7 @@ app.post(
 
                                     <p>
                                         Thank you for choosing
-                                        <b>IndiaStayHub</b>.
+                                        <b>WorldStayHub</b>.
                                     </p>
 
                                     <p>
@@ -569,7 +569,7 @@ app.post(
                                 adminEmail,
 
                             subject:
-                                "New Booking Received - IndiaStayHub",
+                                "New Booking Received - worldStayHub",
 
                             html: `
 
@@ -679,7 +679,7 @@ app.post(
 
                                         <p>
                                             Please check the booking
-                                            in the IndiaStayHub dashboard.
+                                            in the worldStayHub dashboard.
                                         </p>
 
                                     </div>
@@ -771,7 +771,7 @@ app.delete(
                             req.user.email,
 
                         subject:
-                            "Booking Cancelled - IndiaStayHub",
+                            "Booking Cancelled - WorldStayHub",
 
                         html: `
 
@@ -844,7 +844,7 @@ app.delete(
 
                                     <p>
                                         Thank you for using
-                                        <b>IndiaStayHub</b>.
+                                        <b>WorldStayHub</b>.
                                     </p>
 
                                 </div>
@@ -881,7 +881,7 @@ app.delete(
                                 process.env.ADMIN_EMAIL,
 
                             subject:
-                                "Booking Cancelled - IndiaStayHub",
+                                "Booking Cancelled - WorldStayHub",
 
                             html: `
 
